@@ -2,8 +2,8 @@
 const { App } = require("@slack/bolt");
 
 const app = new App({
-  token: process.env.SLACK_BOT_TOKEN,
-  signingSecret: process.env.SLACK_SIGNING_SECRET
+  token: process.env.SLACK_BOT_TOKEN || 'fEjomJGAhbjhXeogMcCsPCgF',
+  signingSecret: process.env.SLACK_SIGNING_SECRET || "c6b928053e4c03460fd56679f05e0bf6"
 });
 
 
@@ -57,6 +57,7 @@ app.event('app_home_opened', async ({ event, client, context }) => {
     });
   }
   catch (error) {
+    console.log("")
     console.error(error);
   }
 });
