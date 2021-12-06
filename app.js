@@ -1,9 +1,10 @@
 // Require the Bolt package (github.com/slackapi/bolt)
 const { App } = require("@slack/bolt");
+require('dotenv').config()
 
 const app = new App({
-  token: process.env.SLACK_BOT_TOKEN || 'fEjomJGAhbjhXeogMcCsPCgF',
-  signingSecret: process.env.SLACK_SIGNING_SECRET || "c6b928053e4c03460fd56679f05e0bf6"
+  token: process.env.SLACK_BOT_TOKEN,
+  signingSecret: process.env.SLACK_SIGNING_SECRET
 });
 
 // All the room in the world for your code
