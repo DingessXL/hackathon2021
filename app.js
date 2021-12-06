@@ -20,6 +20,14 @@ app.event('message', async({event, client, context}) => {
   console.log(" message captured");
 })
 
+// The echo command simply echoes on command
+app.command('/open-pack ', async ({ command, ack, respond }) => {
+  console.log(" we are getting command: ", command, respond);
+  // Acknowledge command request
+  await ack();
+
+  await respond(`${command.text}`);
+});
 
 app.event('app_home_opened', async ({ event, client, context }) => {
   console.log("app home opendedd")
