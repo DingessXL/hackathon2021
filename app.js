@@ -20,7 +20,7 @@ const app = new App({
 
 
 // The echo command simply echoes on command
-app.command('/open-pack ', async ({ ack, body, client }) => {
+app.command('/open-pack ', async ({ command, ack, respond }) => {
   // Acknowledge command request
   await ack();
 
