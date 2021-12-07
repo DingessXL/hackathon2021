@@ -34,7 +34,6 @@ app.command("/elvin", async ({ ack, body, client }) => {
   );
 
   let blocks = GenerateClaimBlock();
-    console.log("hahhaa blocks: ", blocks);
   await client.chat.postMessage({
     channel: body.channel_id,
     blocks: blocks,
