@@ -9,10 +9,10 @@ const GenerateClaimBlock = () => {
 
   for (var card in data["cards"]) {
     let cardData = data.cards[card];
-    let { name, from, id, description } = cardData;
+    let { name, from, id, description, img } = cardData;
     blocks.push(
       getHeaderBlock(name, from),
-      getImageBlock(id, name),
+      getImageBlock(id, name, img),
       getDescriptionBlock(description),
       getClaimButtonBlock(id),
       getDividerBlock()
@@ -32,13 +32,10 @@ function getHeaderBlock(name, from) {
   };
 }
 
-function getImageBlock(id, name) {
+function getImageBlock(id, name, img) {
   return {
     type: "image",
-    image_url: path.join(
-      'https://ibb.co',
-      id
-    ),
+    image_url: img,
     alt_text: name,
   };
 }
