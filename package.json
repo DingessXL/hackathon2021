@@ -2,12 +2,12 @@
   "name": "hackathon2021",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
-    "ngrok": "ngrok http 3000",
+    "ngrok": "ngrok http 8080",
     "build": ""
   },
   "repository": {
