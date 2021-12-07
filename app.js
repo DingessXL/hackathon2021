@@ -2,6 +2,7 @@
 const { App } = require("@slack/bolt");
 require("dotenv").config();
 const { generateBotMessage } = require ('./block');
+const { get } = require ('./utils');
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
   logLevel: "debug",
@@ -25,9 +26,8 @@ app.command('/elvin', async ({  ack, body, client }) => {
     'in_channel',// response_type: 'in_channel' | 'ephemeral';
     true, //replace_original
     false,// delete_original
-    "hahaa" // text
+    "claimingImages" // text
   );
-
 
   await client.chat.postMessage({
     channel: body.channel_id,
@@ -36,6 +36,15 @@ app.command('/elvin', async ({  ack, body, client }) => {
   });
 
 
+});
+
+app.action('claim', async ({ack, body, client}) => {
+  await ack();
+  const msg = `<@${body?.user?.name}> claimed ${body?.message?.blocks[0]?.text?.text}`;
+  await client.chat.postMessage({
+    channel: body?.container?.channel_id,
+    text: msg
+  });
 });
 
 
