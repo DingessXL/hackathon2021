@@ -7,7 +7,12 @@ const {
   GenerateClaimBlock,
   getImageRepoJson,
 } = require("./functions/create-block");
-const { GetCardById, GetUserInfo, ClaimCard } = require("./db");
+const { 
+  GetCardById, 
+  GetUserInfo, 
+  initDb,
+  GetAll,
+} = require("./db");
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
   logLevel: "debug",
@@ -19,14 +24,23 @@ const app = new App({
 const imageHostingApp = express();
 console.log(__dirname);
 imageHostingApp.use("/static", express.static("public"));
+imageHostingApp.use("/", express.static("public"));
 imageHostingApp.listen(parseInt(process.env.IMAGE_HOSTING_PORT));
 // Slack / Bolt Integration
 
 (async () => {
+  // start db
+  await initDb();
   // Start your app
   await app.start(process.env.PORT || 3000);
   console.log("⚡️ Bolt app is running!");
+  
+  ///TODO:  all sql test code here after init
+  let allCards = await GetAll();
+  console.log("getAll: ", allCards)
 })();
+
+
 
 app.command("/elvin", async ({ ack, body, client }) => {
   // Acknowledge command request
@@ -38,7 +52,6 @@ app.command("/elvin", async ({ ack, body, client }) => {
   );
 
   let blocks = GenerateClaimBlock();
-  console.log("hahhaa blocks: ", blocks);
   await client.chat.postMessage({
     channel: body.channel_id,
     blocks: blocks,
@@ -86,4 +99,3 @@ app.command("/open-pack", async ({ ack, body, client }) => {
   });
 });
 
-GetUserInfo("daniel.dingess").then((v) => console.log(v));
