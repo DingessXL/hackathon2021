@@ -16,7 +16,6 @@ const imageHostingApp = express();
 console.log(__dirname);
 imageHostingApp.use("/static", express.static("public"));
 imageHostingApp.listen(parseInt(process.env.IMAGE_HOSTING_PORT));
-GenerateClaimBlock();
 // Slack / Bolt Integration
 
 (async () => {
