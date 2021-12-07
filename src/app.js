@@ -1,7 +1,7 @@
 // Require the Bolt package (github.com/slackapi/bolt)
 const { App } = require("@slack/bolt");
 require("dotenv").config();
-const { generateBotMessage } = require ('./block');
+const { generateBotMessage } = require ('./functions/block');
 const express = require("express");
 
 const app = new App({
