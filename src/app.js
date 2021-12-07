@@ -3,8 +3,11 @@ const { App } = require("@slack/bolt");
 const { ConsoleLogger } = require("@slack/logger");
 require("dotenv").config();
 const express = require("express");
-const { GenerateClaimBlock, getImageRepoJson } = require("./functions/create-block");
-
+const {
+  GenerateClaimBlock,
+  getImageRepoJson,
+} = require("./functions/create-block");
+const { GetCardById, GetUserInfo } = require("./db");
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
   logLevel: "debug",
@@ -35,11 +38,7 @@ app.command("/elvin", async ({ ack, body, client }) => {
   );
 
   let blocks = GenerateClaimBlock();
-<<<<<<< HEAD
   console.log("hahhaa blocks: ", blocks);
-=======
-
->>>>>>> 0bc318d43dc84fab1e78e116594f6be44b0a9f67
   await client.chat.postMessage({
     channel: body.channel_id,
     blocks: blocks,
@@ -47,19 +46,19 @@ app.command("/elvin", async ({ ack, body, client }) => {
   });
 });
 
-<<<<<<< HEAD
 app.action("claim", async ({ ack, body, client }) => {
   console.log(body);
-=======
-app.action('claim', async ({ack, body, client}) => {
->>>>>>> 0bc318d43dc84fab1e78e116594f6be44b0a9f67
   await ack();
   // hackthon way to pick put block thats selected
 
   let selectedId = body.actions[0].value;
-  let imgsJson = getImageRepoJson();
-  let result = imgsJson.cards.filter(img => img.id === selectedId);
-  const msg = `<@${body.user.name}> claimed ${result[0].name} | *${result[0].from}*`;
+  let msg = "";
+  //TODO: update the claimed card with the username
+  await GetCardById(selectedId).then((value) => {
+    let card = JSON.parse(JSON.parse(JSON.stringify(value))[0].card);
+    msg = `<@${body.user.name}> claimed ${card.name} | *${card.category}*`;
+  });
+
   await client.chat.postMessage({
     channel: body?.container?.channel_id,
     text: msg,
@@ -84,4 +83,4 @@ app.command("/open-pack", async ({ ack, body, client }) => {
   });
 });
 
-
+GetUserInfo("daniel.dingess").then((v) => console.log(v));

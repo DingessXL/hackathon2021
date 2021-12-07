@@ -18,7 +18,6 @@ const GenerateClaimBlock = async () => {
             ? getDescriptionBlock(`Claimed by *${claimedBy}*`)
             : getClaimButtonBlock(id),
 
-<<<<<<< HEAD
           getDividerBlock()
         );
       }
@@ -30,35 +29,6 @@ const GenerateClaimBlock = async () => {
 };
 
 function getHeaderBlock(name, category) {
-=======
-const getImageRepoJson = () => {
-  let url = path.join(__dirname, "..", "..", "data", "imageRepo.json");
-  let data = JSON.parse(fs.readFileSync(url, "utf-8"));
-return data;
-}
-
-const GenerateClaimBlock = () => {
-  let url = path.join(__dirname, "..", "..", "data", "imageRepo.json");
-  let data = JSON.parse(fs.readFileSync(url, "utf-8"));
-  let blocks = [];
-
-  for (var card in data["cards"]) {
-    let cardData = data.cards[card];
-    let { name, from, id, description, img } = cardData;
-    blocks.push(
-      getHeaderBlock(id, name, from),
-      getImageBlock(id, name, img),
-      getDescriptionBlock(description),
-      getClaimButtonBlock(id),
-      getDividerBlock()
-    );
-  }
-  console.log(blocks);
-  return blocks;
-};
-
-function getHeaderBlock(id, name, from) {
->>>>>>> 0bc318d43dc84fab1e78e116594f6be44b0a9f67
   return {
     type: "section",
     text: {
@@ -109,6 +79,9 @@ function getDividerBlock() {
   return {
     type: "divider",
   };
+}
+function getImageRepoJson (){
+  return {};
 }
 module.exports = {
   GenerateClaimBlock,
