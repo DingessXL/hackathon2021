@@ -3,6 +3,7 @@ const { App } = require("@slack/bolt");
 require("dotenv").config();
 const { generateBotMessage } = require ('./functions/block');
 const express = require("express");
+const { GenerateClaimBlock } = require("./functions/create-block");
 
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
@@ -16,7 +17,7 @@ const imageHostingApp = express();
 console.log(__dirname);
 imageHostingApp.use("/static", express.static("public"));
 imageHostingApp.listen(parseInt(process.env.IMAGE_HOSTING_PORT));
-
+GenerateClaimBlock();
 // Slack / Bolt Integration
 
 (async () => {
