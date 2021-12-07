@@ -1,7 +1,7 @@
 // Require the Bolt package (github.com/slackapi/bolt)
 const { App } = require("@slack/bolt");
 require("dotenv").config();
-
+const { generateBotMessage } = require ('./block');
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
   logLevel: "debug",
@@ -18,8 +18,8 @@ const app = new App({
 })();
 
 
-app.command('/elvin', async ({ command, ack, respond }) => {
-  console.log("elvin hahahaa")
+
+app.command('/elvin', async ({  ack, body, client }) => {
   // Acknowledge command request
   await ack(
     'in_channel',// response_type: 'in_channel' | 'ephemeral';
@@ -28,7 +28,13 @@ app.command('/elvin', async ({ command, ack, respond }) => {
     "hahaa" // text
   );
 
-   await respond(`hahahaa this is commmand text: ${command.text}`);
+
+  await client.chat.postMessage({
+    channel: body.channel_id,
+    blocks: generateBotMessage(),
+    text: 'elvin posting message back'
+  });
+
 
 });
 
@@ -42,45 +48,5 @@ app.command("/open-pack", async ({ command, ack, respond }) => {
     await respond(`${command.text.toString()}`);
   } catch (error) {
     //console.log(error);
-  }
-});
-
-app.event("app_home_opened", async ({ event, client, context }) => {
-  try {
-    /* view.publish is the method that your app uses to push a view to the Home tab */
-    const result = await client.views.publish({
-      /* the user that opened your app's app home */
-      user_id: event.user,
-
-      /* the view object that appears in the app home*/
-      view: {
-        type: "home",
-        callback_id: "home_view",
-
-        /* body of the view */
-        blocks: [
-          {
-            type: "section",
-            text: {
-              type: "mrkdwn",
-              text: "*Welcome to your _App's Home_* :tada:",
-            },
-          },
-          {
-            type: "divider",
-          },
-          {
-            type: "section",
-            text: {
-              type: "mrkdwn",
-              text: "testing the listener........",
-            },
-          },
-        ],
-      },
-    });
-  } catch (error) {
-    console.log("");
-    console.error(error);
   }
 });
