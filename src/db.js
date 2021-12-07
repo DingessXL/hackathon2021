@@ -40,7 +40,7 @@ async function GetRandomDrawFromDB(limit) {
   });
 }
 
-async function GetAll() {
+async function GetAllCards() {
   return new Promise((resolve, reject) => {
     conn.query(
       `SELECT JSON_OBJECT('id', c.id , 'name', c.name, 'description', c.description, 'category', c.category, 'img', c.img, 'claimedBy', c.claimedBy) as 'card' FROM cards c`,
@@ -52,6 +52,16 @@ async function GetAll() {
       }
     );
   });
+}
+
+async function getAllUsers() {
+  return new Promise((resolve, reject) => {  
+    let sql2 = `SELECT JSON_OBJECT('id', p.id, 'username', p.username, 'lastPull', p.lastPull) as 'person' FROM person p`;
+    conn.query(sql2, (error, result, fields) => {
+      if (error) console.log(error);
+      resolve(result);
+    });  
+  });  
 }
 
 async function GetCardById(id) {
@@ -70,20 +80,6 @@ async function GetCardById(id) {
 
 async function GetUserInfo(username) {
   return new Promise((resolve, reject) => {
-    conn = mysql.createConnection({
-      host: "db-mysql-nyc3-92852-do-user-10388635-0.b.db.ondigitalocean.com",
-      port: 25060,
-      database: "cardbot",
-      user: "doadmin",
-      password: "0u8jWt7J8cWBaSZh",
-      ssl: true,
-    });
-
-    conn.connect(function (err) {
-      if (err) throw err;
-      console.log("Connected");
-    });
-
     let sql1 = `INSERT INTO person (username, lastPull) VALUES ('${username}', NOW()) ON DUPLICATE KEY UPDATE lastPull = NOW()`;
     conn.query(sql1, (error, result, fields) => {
       if (error) console.log(error);
@@ -115,10 +111,11 @@ async function ClaimCard(username, id) {
 }
 
 module.exports = {
-  GetAll,
+  GetAllCards,
   initDb,
   GetRandomDrawFromDB,
   GetCardById,
   GetUserInfo,
   ClaimCard,
+  getAllUsers
 };

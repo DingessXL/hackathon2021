@@ -7,7 +7,13 @@ const {
   GenerateClaimBlock,
   getImageRepoJson,
 } = require("./functions/create-block");
-const { GetCardById, GetUserInfo, initDb, GetAll, ClaimCard } = require("./db");
+const { GetCardById,
+  GetUserInfo,
+  initDb,
+  GetAllCards,
+  ClaimCard,
+  getAllUsers
+} = require("./db");
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
   logLevel: "debug",
@@ -20,6 +26,8 @@ const imageHostingApp = express();
 console.log(__dirname);
 imageHostingApp.use("/static", express.static("public"));
 imageHostingApp.use("/", express.static("public"));
+imageHostingApp.get("/allCards", async (req, res) => res.json(await GetAllCards()));
+imageHostingApp.get("/allUsers", async (req, res) => res.json(await getAllUsers()));
 imageHostingApp.listen(parseInt(process.env.IMAGE_HOSTING_PORT));
 // Slack / Bolt Integration
 
@@ -31,8 +39,8 @@ imageHostingApp.listen(parseInt(process.env.IMAGE_HOSTING_PORT));
   console.log("⚡️ Bolt app is running!");
 
   ///TODO:  all sql test code here after init
-  let allCards = await GetAll();
-  console.log("getAll: ", allCards);
+  // let allCards = await GetAllCards();
+  // console.log("getAll: ", allCards)
 })();
 
 app.command("/elvin", async ({ ack, body, client }) => {
