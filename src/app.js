@@ -29,12 +29,12 @@ app.command("/elvin", async ({ ack, body, client }) => {
   await ack(
     "in_channel", // response_type: 'in_channel' | 'ephemeral';
     true, //replace_original
-    false,// delete_original
+    false, // delete_original
     "claimingImages" // text
   );
 
   let blocks = GenerateClaimBlock();
-    console.log("hahhaa blocks: ", blocks);
+  console.log("hahhaa blocks: ", blocks);
   await client.chat.postMessage({
     channel: body.channel_id,
     blocks: blocks,
@@ -42,26 +42,32 @@ app.command("/elvin", async ({ ack, body, client }) => {
   });
 });
 
-app.action('claim', async ({ack, body, client}) => {
+app.action("claim", async ({ ack, body, client }) => {
   console.log(body);
   await ack();
   const msg = `<@${body.user.name}> claimed ${body.message.blocks[0].text.text}`;
   await client.chat.postMessage({
     channel: body?.container?.channel_id,
-    text: msg
+    text: msg,
   });
 });
 
 // The echo command simply echoes on command
-app.command("/open-pack", async ({  ack, body, client }) => {
-  try {
-    await ack().catch((error) => console.log("error"));
-    await client.chat.postMessage({
-      channel: body.channel_id,
-      blocks: GenerateClaimBlock(),
-      text: "Make your claim now!",
-    });
-  } catch (error) {
-    console.log(error);
-  }
+app.command("/open-pack", async ({ ack, body, client }) => {
+  // Acknowledge command request
+  await ack(
+    "in_channel", // response_type: 'in_channel' | 'ephemeral';
+    true, //replace_original
+    false, // delete_original
+    "claimingImages" // text
+  );
+
+  let blocks = await GenerateClaimBlock();
+  await client.chat.postMessage({
+    channel: body.channel_id,
+    blocks: blocks,
+    text: "Make your claim now!",
+  });
 });
+
+

@@ -1,0 +1,17 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "db-mysql-nyc3-92852-do-user-10388635-0.b.db.ondigitalocean.com",
+            "port": 25060,
+            "driver": "MySQL",
+            "name": "cardbot-db",
+            "password": "0u8jWt7J8cWBaSZh",
+            "username": "doadmin",
+            "database": "cardbot"
+        }
+    ]
+}
