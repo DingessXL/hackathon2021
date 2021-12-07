@@ -4,13 +4,8 @@ require('dotenv').config()
 
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
-<<<<<<< Updated upstream
-  signingSecret: process.env.SLACK_SIGNING_SECRET,
-  appToken: process.env.SLACK_APP_TOKEN,
-=======
   logLevel: 'debug',
   signingSecret: process.env.SLACK_SIGNING_SECRET
->>>>>>> Stashed changes
 });
 
 // All the room in the world for your code
