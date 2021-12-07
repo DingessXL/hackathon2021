@@ -7,7 +7,7 @@ const {
   GenerateClaimBlock,
   getImageRepoJson,
 } = require("./functions/create-block");
-const { GetCardById, GetUserInfo } = require("./db");
+const { GetCardById, GetUserInfo, ClaimCard } = require("./db");
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
   logLevel: "debug",
@@ -53,6 +53,9 @@ app.action("claim", async ({ ack, body, client }) => {
 
   let selectedId = body.actions[0].value;
   let msg = "";
+
+  ClaimCard(body.user.name, selectedId)
+
   //TODO: update the claimed card with the username
   await GetCardById(selectedId).then((value) => {
     let card = JSON.parse(JSON.parse(JSON.stringify(value))[0].card);

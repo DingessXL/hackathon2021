@@ -28,6 +28,7 @@ async function GetRandomDrawFromDB(limit) {
     );
   });
 }
+
 async function GetCardById(id) {
   return new Promise((resolve, reject) => {
     conn = mysql.createConnection({
@@ -72,13 +73,33 @@ async function GetUserInfo(username) {
       console.log("Connected");
     });
 
-    let sql = `
-    IF NOT EXISTS (SELECT 'y' from person where username = '${username}') INSERT INTO person (username, lastPull) values ('${username}', '${moment().format("YYYY-MM-DD HH:mm:ss.000")}') SELECT JSON_OBJECT('id', p.id, 'lastPull', p.lastPull) from person p where username = '${username}';`;
-    conn.query(sql, (error, result, fields) => {
-        console.log(sql);
-        console.log(error);
+    let sql1 = `INSERT INTO person (username, lastPull) VALUES ('${username}', NOW()) ON DUPLICATE KEY UPDATE lastPull = NOW()`;
+    conn.query(sql1, (error, result, fields) => {
+      if (error) console.log(error);
+    });
+
+    let sql2 = `SELECT JSON_OBJECT('id', p.id, 'username', p.username, 'lastPull', p.lastPull) from person p where username = '${username}'`;
+    conn.query(sql2, (error, result, fields) => {
+      if (error) console.log(error);
       resolve(result);
     });
+  });
+}
+
+async function ClaimCard(username, id) {
+  conn = mysql.createConnection({
+    host: "db-mysql-nyc3-92852-do-user-10388635-0.b.db.ondigitalocean.com",
+    port: 25060,
+    database: "cardbot",
+    user: "doadmin",
+    password: "0u8jWt7J8cWBaSZh",
+    ssl: true,
+  });
+
+  let sql = `UPDATE cards set claimedBy = if(claimedBy is null, '${username}', claimedBy) where id = ${id}`;
+  conn.query(sql, (error, result, fields) => {
+    console.log(sql);
+    console.log(error);
   });
 }
 
@@ -86,4 +107,5 @@ module.exports = {
   GetRandomDrawFromDB,
   GetCardById,
   GetUserInfo,
+  ClaimCard,
 };
