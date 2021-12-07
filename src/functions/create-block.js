@@ -2,6 +2,12 @@ const fs = require("fs");
 const path = require("path");
 require("dotenv").config();
 
+const getImageRepoJson = () => {
+  let url = path.join(__dirname, "..", "..", "data", "imageRepo.json");
+  let data = JSON.parse(fs.readFileSync(url, "utf-8"));
+return data;
+}
+
 const GenerateClaimBlock = () => {
   let url = path.join(__dirname, "..", "..", "data", "imageRepo.json");
   let data = JSON.parse(fs.readFileSync(url, "utf-8"));
@@ -11,7 +17,7 @@ const GenerateClaimBlock = () => {
     let cardData = data.cards[card];
     let { name, from, id, description, img } = cardData;
     blocks.push(
-      getHeaderBlock(name, from),
+      getHeaderBlock(id, name, from),
       getImageBlock(id, name, img),
       getDescriptionBlock(description),
       getClaimButtonBlock(id),
@@ -22,7 +28,7 @@ const GenerateClaimBlock = () => {
   return blocks;
 };
 
-function getHeaderBlock(name, from) {
+function getHeaderBlock(id, name, from) {
   return {
     type: "section",
     text: {
@@ -76,4 +82,5 @@ function getDividerBlock() {
 }
 module.exports = {
   GenerateClaimBlock,
+  getImageRepoJson
 };
