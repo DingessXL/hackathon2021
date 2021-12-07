@@ -60,6 +60,37 @@ app.command("/elvin", async ({ ack, body, client }) => {
   });
 });
 
+app.command("/hatsoff", async ({ ack, body, client }) => {
+  // Acknowledge command request
+  await ack(
+    "in_channel", // response_type: 'in_channel' | 'ephemeral';
+    true, //replace_original
+    false, // delete_original
+    "claimingImages" // text
+  );
+
+  await client.chat.postMessage({
+    channel: body.channel_id,
+    text: "Thank you.  *Hats Off*",
+  });
+});
+
+app.command("/showcard", async ({ ack, body, client }) => {
+  // Acknowledge command request
+  await ack(
+    "in_channel", // response_type: 'in_channel' | 'ephemeral';
+    true, //replace_original
+    false, // delete_original
+    "claimingImages" // text
+  );
+
+  //TODO:  need a more static url
+  await client.chat.postMessage({
+    channel: body.channel_id,
+    text: "To see all cards: https://8f96-68-36-74-78.ngrok.io",
+  });
+});
+
 app.action("claim", async ({ ack, body, client }) => {
   console.log(body);
   await ack();
