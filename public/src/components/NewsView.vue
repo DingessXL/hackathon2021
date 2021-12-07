@@ -5,7 +5,7 @@
 
     <ul>
       <li v-for="item in items" class="itemContainer">
-        <span class="username">{{ item.name }}</span>
+        <span class="username">{{ item.name || "FREE"}}</span>
         <span v-if="item.imgs.length" class="script">Image Owned:</span>
         <span v-else class="script" >No Image Owned</span>
         <ul>
@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import store from '../store'
+import Rest from '../store/Rest'
 import Item from './Item.vue'
 
 export default {
@@ -95,7 +95,65 @@ export default {
   },
 
   created () {
-    store.on('topstories-updated', this.update)
+
+    // store.on('topstories-updated', this.update)
+    Rest.getUsers().then((data) => {
+
+      console.log("hahaah all users: ", data);
+    });
+
+        Rest.getAllCards().then((data) => {
+          console.log("hahaah all cards 1: ", data);
+        
+
+      let allCards = data.map(elem=> {
+        
+        let card = JSON.parse(elem.card);
+        console.log(" each individula card: ", card);
+        return {
+          img: card.img,
+          claimedBy: card.claimedBy,
+          name: card.name
+
+        };
+      });
+
+      console.log("hahaah all cards: ", allCards);
+
+      let trueData = {}
+      allCards.forEach(elem => {
+        if (trueData[elem.claimedBy]){
+          trueData[elem.claimedBy].push(elem.img)
+        } else {
+          trueData[elem.claimedBy] = [];
+          trueData[elem.claimedBy].push(elem.img)
+        }
+        
+      })
+
+      console.log("hahaah all cards: ", trueData);
+
+let truDataArray = []
+      Object.keys(trueData).forEach(key => {
+        console.log("here is aray : trueData[key]", trueData[key]);
+        let mapping  = trueData[key].map(item => {
+            return {image_url: item}
+        });
+        console.log("here is aray : mkapping", mapping);
+        if (key == "null") key = "FREE"
+        truDataArray.push({
+          name: key,
+          imgs: mapping
+        })
+      })
+
+      console.log("fial: ", truDataArray);
+
+this.items = truDataArray;
+
+
+    });
+    
   },
 
   destroyed () {
