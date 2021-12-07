@@ -1,7 +1,6 @@
 // Require the Bolt package (github.com/slackapi/bolt)
 const { App } = require("@slack/bolt");
 require("dotenv").config();
-const { generateBotMessage } = require ('./functions/block');
 const express = require("express");
 const { GenerateClaimBlock } = require("./functions/create-block");
 
@@ -35,14 +34,17 @@ app.command("/elvin", async ({ ack, body, client }) => {
     "claimingImages" // text
   );
 
+  let blocks = GenerateClaimBlock();
+    console.log("hahhaa blocks: ", blocks);
   await client.chat.postMessage({
     channel: body.channel_id,
-    blocks: generateBotMessage(),
+    blocks: blocks,
     text: "elvin posting message back",
   });
 });
 
 app.action('claim', async ({ack, body, client}) => {
+  console.log(body);
   await ack();
   const msg = `<@${body?.user?.name}> claimed ${body?.message?.blocks[0]?.text?.text}`;
   await client.chat.postMessage({
@@ -52,13 +54,15 @@ app.action('claim', async ({ack, body, client}) => {
 });
 
 // The echo command simply echoes on command
-app.command("/open-pack", async ({ command, ack, respond }) => {
-  console.log(command);
-
+app.command("/open-pack", async ({  ack, body, client }) => {
   try {
     await ack().catch((error) => console.log("error"));
-    await respond(`${command.text.toString()}`);
+    await client.chat.postMessage({
+      channel: body.channel_id,
+      blocks: GenerateClaimBlock(),
+      text: "Make your claim now!",
+    });
   } catch (error) {
-    //console.log(error);
+    console.log(error);
   }
 });
