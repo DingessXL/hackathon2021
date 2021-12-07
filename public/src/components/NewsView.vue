@@ -10,7 +10,7 @@
         <span v-else class="script" >No Image Owned</span>
         <ul>
           <li v-for="img in item.imgs" class="imageWrap">
-            <img :src="img.image_url" class="image" />
+            <img :src="img.image_url" class="image" onerror="this.style.display='none';"  />
           </li>
         </ul>
       </li>
