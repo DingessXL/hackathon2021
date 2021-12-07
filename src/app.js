@@ -7,12 +7,7 @@ const {
   GenerateClaimBlock,
   getImageRepoJson,
 } = require("./functions/create-block");
-const { 
-  GetCardById, 
-  GetUserInfo, 
-  initDb,
-  GetAll,
-} = require("./db");
+const { GetCardById, GetUserInfo, initDb, GetAll, ClaimCard } = require("./db");
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
   logLevel: "debug",
@@ -34,13 +29,11 @@ imageHostingApp.listen(parseInt(process.env.IMAGE_HOSTING_PORT));
   // Start your app
   await app.start(process.env.PORT || 3000);
   console.log("⚡️ Bolt app is running!");
-  
+
   ///TODO:  all sql test code here after init
   let allCards = await GetAll();
-  console.log("getAll: ", allCards)
+  console.log("getAll: ", allCards);
 })();
-
-
 
 app.command("/elvin", async ({ ack, body, client }) => {
   // Acknowledge command request
@@ -67,7 +60,7 @@ app.action("claim", async ({ ack, body, client }) => {
   let selectedId = body.actions[0].value;
   let msg = "";
 
-  ClaimCard(body.user.name, selectedId)
+  ClaimCard(body.user.name, selectedId);
 
   //TODO: update the claimed card with the username
   await GetCardById(selectedId).then((value) => {
@@ -98,4 +91,3 @@ app.command("/open-pack", async ({ ack, body, client }) => {
     text: "Make your claim now!",
   });
 });
-
