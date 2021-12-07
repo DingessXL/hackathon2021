@@ -4,8 +4,13 @@ require('dotenv').config()
 
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
+<<<<<<< Updated upstream
   signingSecret: process.env.SLACK_SIGNING_SECRET,
   appToken: process.env.SLACK_APP_TOKEN,
+=======
+  logLevel: 'debug',
+  signingSecret: process.env.SLACK_SIGNING_SECRET
+>>>>>>> Stashed changes
 });
 
 // All the room in the world for your code
@@ -17,13 +22,10 @@ const app = new App({
   console.log('⚡️ Bolt app is running!');
 })();
 
-app.event('message', async({event, client, context}) => {
-  console.log(" message captured");
-})
+
 
 // The echo command simply echoes on command
-app.command('/open-pack ', async ({ command, ack, respond }) => {
-  console.log(" we are getting command: ", command, respond);
+app.command('/open-pack ', async ({ ack, body, client }) => {
   // Acknowledge command request
   await ack();
 
