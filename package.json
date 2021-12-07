@@ -8,6 +8,7 @@
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
     "ngrok": "ngrok http 8080",
+    "buildFront": "cd public && npm run build && cd ..",
     "build": ""
   },
   "repository": {
