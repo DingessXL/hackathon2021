@@ -39,8 +39,7 @@ function getImageBlock(id, name) {
       process.env.APP_URL,
       "static",
       "images",
-      `${id}`,
-      ".jpg"
+      `${id}.jpg`,
     ),
     alt_text: name,
   };
