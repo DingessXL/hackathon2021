@@ -34,6 +34,7 @@ app.command("/elvin", async ({ ack, body, client }) => {
   );
 
   let blocks = GenerateClaimBlock();
+    console.log("hahhaa blocks: ", blocks);
   await client.chat.postMessage({
     channel: body.channel_id,
     blocks: blocks,
@@ -44,7 +45,7 @@ app.command("/elvin", async ({ ack, body, client }) => {
 app.action('claim', async ({ack, body, client}) => {
   console.log(body);
   await ack();
-  const msg = `<@${body?.user?.name}> claimed ${body?.message?.blocks[0]?.text?.text}`;
+  const msg = `<@${body.user.name}> claimed ${body.message.blocks[0].text.text}`;
   await client.chat.postMessage({
     channel: body?.container?.channel_id,
     text: msg
