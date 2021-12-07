@@ -36,10 +36,8 @@ function getImageBlock(id, name) {
   return {
     type: "image",
     image_url: path.join(
-      process.env.APP_URL,
-      "static",
-      "images",
-      `${id}.jpg`,
+      'https://ibb.co',
+      id
     ),
     alt_text: name,
   };
@@ -66,7 +64,7 @@ function getClaimButtonBlock(id) {
           text: "Claim",
           emoji: true,
         },
-        value: `${id}`,
+        value: id,
         style: "primary",
         action_id: "claim",
       },
