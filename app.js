@@ -1,11 +1,12 @@
 // Require the Bolt package (github.com/slackapi/bolt)
 const { App } = require("@slack/bolt");
-require('dotenv').config()
+require("dotenv").config();
 
 const app = new App({
   token: process.env.SLACK_BOT_TOKEN,
-  logLevel: 'debug',
-  signingSecret: process.env.SLACK_SIGNING_SECRET
+  logLevel: "debug",
+  signingSecret: process.env.SLACK_SIGNING_SECRET,
+  appToken: process.env.SLACK_APP_TOKEN,
 });
 
 // All the room in the world for your code
@@ -13,8 +14,7 @@ const app = new App({
 (async () => {
   // Start your app
   await app.start(process.env.PORT || 3000);
-
-  console.log('⚡️ Bolt app is running!');
+  console.log("⚡️ Bolt app is running!");
 })();
 
 
@@ -34,58 +34,53 @@ app.command('/elvin', async ({ command, ack, respond }) => {
 
 
 // The echo command simply echoes on command
-app.command('/open-pack ', async ({ command, ack, respond }) => {
-  // Acknowledge command request
-  ack(
-    'in_channel',// | 'ephemeral';
-    true,
-    false,
-    "fire!"
-  );
-
-   await respond(`hahahaa this is commmand text: ${command.text}`);
+app.command("/open-pack", async ({ command, ack, respond }) => {
+  console.log(command);
+  
+  try {
+    await ack().catch(error => console.log('error'));
+    await respond(`${command.text.toString()}`);
+  } catch (error) {
+    //console.log(error);
+  }
 });
 
-app.event('app_home_opened', async ({ event, client, context }) => {
-  console.log("app home opendedd")
-
+app.event("app_home_opened", async ({ event, client, context }) => {
   try {
     /* view.publish is the method that your app uses to push a view to the Home tab */
     const result = await client.views.publish({
-
       /* the user that opened your app's app home */
       user_id: event.user,
 
       /* the view object that appears in the app home*/
       view: {
-        type: 'home',
-        callback_id: 'home_view',
+        type: "home",
+        callback_id: "home_view",
 
         /* body of the view */
         blocks: [
           {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": "*Welcome to your _App's Home_* :tada:"
-            }
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: "*Welcome to your _App's Home_* :tada:",
+            },
           },
           {
-            "type": "divider"
+            type: "divider",
           },
           {
-            "type": "section",
-            "text": {
-              "type": "mrkdwn",
-              "text": "testing the listener........"
-            }
-          }
-        ]
-      }
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: "testing the listener........",
+            },
+          },
+        ],
+      },
     });
-  }
-  catch (error) {
-    console.log("")
+  } catch (error) {
+    console.log("");
     console.error(error);
   }
 });
