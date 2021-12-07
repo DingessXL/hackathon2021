@@ -18,13 +18,32 @@ const app = new App({
 })();
 
 
+app.command('/elvin', async ({ command, ack, respond }) => {
+  console.log("elvin hahahaa")
+  // Acknowledge command request
+  await ack(
+    'in_channel',// response_type: 'in_channel' | 'ephemeral';
+    true, //replace_original
+    false,// delete_original
+    "hahaa" // text
+  );
+
+   await respond(`hahahaa this is commmand text: ${command.text}`);
+
+});
+
 
 // The echo command simply echoes on command
 app.command('/open-pack ', async ({ command, ack, respond }) => {
   // Acknowledge command request
-  await ack();
+  ack(
+    'in_channel',// | 'ephemeral';
+    true,
+    false,
+    "fire!"
+  );
 
-  await respond(`${command.text}`);
+   await respond(`hahahaa this is commmand text: ${command.text}`);
 });
 
 app.event('app_home_opened', async ({ event, client, context }) => {
